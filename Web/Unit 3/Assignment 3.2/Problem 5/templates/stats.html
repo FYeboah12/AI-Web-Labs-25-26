@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<head>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+        body {
+            font-family: Ubuntu;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Hello! This is Problem 5</h1>
+    <h1>Stats:</h1>
+    <p>Wins: {{stats.wins}}</p>
+    <p>Losses: {{stats.losses}}</p>
+    <p>Total plays: {{stats.wins + stats.losses}}</p>
+    <h2>Ratio of Wins/Losses:</h2>
+    <p>Wins: {{stats.wins/(stats.wins + stats.losses)}}</p>
+    <p>Losses: {{stats.losses/(stats.wins + stats.losses)}}</p>
+</body>
+
+</html>
