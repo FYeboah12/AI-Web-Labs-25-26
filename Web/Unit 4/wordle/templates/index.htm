@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+    <head>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Elms+Sans:ital,wght@0,100..900;1,100..900&family=Emilys+Candy&display=swap');
+            body{
+                font-family: "Elms Sans";
+            }
+            .enter_word{
+                border: 2px solid black;
+                padding: 2.5%;
+                margin: 2.5%;
+                font-size: 28px;
+            }
+            #buttons{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #buttons button{
+                font-size: 64px;
+                text-align: center;
+                margin: 0.5%;
+                padding: 0.75%;
+                border-radius: 20px;
+                font-family: "Emilys Candy";
+            }
+            #green{
+                background-color: #C8D96F;
+            }
+            #yellow{
+                background-color: #F8E16C;
+            }
+            #gray{
+                background-color: #616163;
+                color: white;
+            }
+            .possible_words{
+                border: 2px solid black;
+                padding: 0.25%;
+                margin: 2.5%;
+            }
+            #submit, #reset{
+                font-size: 32px;
+                text-align: center;
+                margin: 0.5%;
+                padding: 0.75%;
+                border-radius: 20px;
+                font-family: "Elms Sans";
+                background-color: #F00699; 
+            }
+            #reset{
+                float: right;
+            }
+            #fullWord li{
+                display: inline;
+                text-decoration: none;
+            }
+            #listOfPoss{
+                columns: 10;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Frances' Super Awesome and Cool Wordle Solver</h1>
+        <h3>Instructions:</h3>
+        <p>Click on the button corresponding with the letter's color. Then, click on the box and type the letter, making sure to switch buttons.</p>
+        <div class="enter_word" onClick="currentType()">
+            <p id="deleteWhenClick">Choose a color and then start entering your word.</p>
+            <!--each letter can be an li and make display inline so it's all on one line, on key press-->
+            <ul id="fullWord">
+
+            </ul>
+        </div>
+        <button id="submit" onclick="submit()">Get your wordle words!</button>
+        <button id="reset" onclick="reset()">Reset</button>
+        <div id="buttons">
+        <button id="green" onclick="changeColor(this)">
+            green
+        </button>
+        <button id="yellow" onclick="changeColor(this)">
+            yellow
+        </button>
+        <button id="gray" onclick="changeColor(this)">
+            gray
+        </button>
+        </div>
+        <div class="possible_words">
+            <h2 style="text-decoration: underline; text-align: center">List of Possible Words</h2>
+            <ul id="listOfPoss">
+
+            </ul>
+        </div>
+    </body>
+    <script>
+        //have a dict, add letters in order with currentColor: {letter: curColor}
+        var letterColor = []
+        var currentColor = "black"
+        var currentlyTypingLetters = false
+        const displayList = document.querySelector("#listOfPoss");
+        const inst = document.querySelector("#deleteWhenClick");
+        let wordContainer = document.querySelector("#fullWord")
+        document.body.addEventListener("keydown", type)
+        
+        function changeColor(buttonClicked){
+            currentColor = buttonClicked.id
+            //console.log(currentColor)
+        }
+        function currentType(){
+            currentlyTypingLetters = true
+            //console.log(currentlyTypingLetters)
+        }
+
+        function type(e){
+            if(currentlyTypingLetters && wordContainer.getElementsByTagName("li").length < 5){  
+                inst.innerHTML = ""        
+                const node = document.createElement("li");
+                const textnode = document.createTextNode(e.code.slice(3));
+                node.appendChild(textnode);
+                node.style.color = currentColor;
+                wordContainer.appendChild(node);
+                let map = {}
+                map[e.code.slice(3)] = currentColor
+                letterColor.push(map)
+                //console.log(letterColor)
+            }
+        }
+        async function submit(){
+            currentlyTypingLetters = false
+            const response = await fetch(`http://127.0.0.1/getwords/${JSON.stringify(letterColor)}`)
+            const yellows_and_grays = await response.json()
+            console.log(yellows_and_grays)
+            yellows = yellows_and_grays[0]
+            grays = yellows_and_grays[1]
+            greens = yellows_and_grays[2]
+            let exclude = grays.join("").toLowerCase()
+            let yellow = ""
+            let green = ""
+            for(let i=0; i < yellows.length; i++){
+                yellow += yellows[i].join("").toLowerCase()
+            }
+            for(let i=0; i < greens.length; i++){
+                green += greens[i].join("").toLowerCase()
+            }
+            if (grays.length == 0){
+                exclude = "404"
+            }
+            if (greens.length == 0){
+                green = "404"
+            }
+            if (yellows.length == 0){
+                yellow = "404"
+            }
+            const possible_words_response = await fetch(`http://127.0.0.1/returnWords/${exclude}/${yellow}/${green}`)
+            const list_of_words = await possible_words_response.json()
+
+            /*display the words*/
+            for(let i=0; i < list_of_words.length; i++){
+                const node = document.createElement("li");
+                const textnode = document.createTextNode(list_of_words[i]);
+                node.appendChild(textnode);
+                displayList.appendChild(node);
+            }
+            if(list_of_words.length == 0){
+                const node = document.createElement("li");
+                const textnode = document.createTextNode("NO WORDS!");
+                node.appendChild(textnode);
+                displayList.appendChild(node);
+            }
+        }
+
+        function reset(){
+            letterColor = []
+            wordContainer.replaceChildren()
+            displayList.replaceChildren()
+        }
+        </script>
+</html>

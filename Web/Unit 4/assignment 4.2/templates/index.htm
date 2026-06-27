@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    .schedule_container {
+      width: 50vh;
+      margin: auto;
+    }
+    .image_container > img {
+      width: 50vh;
+    }
+    .display_container {
+      display: block;
+      background-color: blue;
+    }
+    .lefty { float: left; }
+    .righty { float: right; }
+    table, td, th {
+  border: 1px solid;
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+}
+body{
+  font-size: 1.5em;
+  font-family: Montserrat;
+}
+  </style>
+</head>
+<body>
+
+  <h3>Schedule Viewer</h3>
+  
+  <div class="schedule_container">
+     <input type="date" id="cal_picker" onchange="scheduleFetch()">
+    <div class="display_container">
+         <div class="lefty">
+           <span id="schedule_disp">
+            <p>Choose a date to see the TJ schedule for that day.</p>
+              <h1 id="day_type"></h1>
+              <table id="schedule">
+                <tr>
+                  <th>Period</th>
+                  <th>Start</th>
+                  <th>End</th>
+                </tr>
+                <!--each row is a new period-->
+              </table>
+           </span>
+         </div>
+    </div>
+  </div>
+
+
+  <script>
+
+    const scheduleFetch =  async() => {
+        var table = document.getElementById("schedule");
+        if (table.rows.length > 1){
+          for(let i = table.rows.length-1; i > 0; i--){
+            table.deleteRow(i)
+          } 
+        }
+        const date = document.querySelector('input[type="date"]');
+        const response = await fetch(`http://127.0.0.1/get_schedule_from_ion/${date.value}`)
+        const data = await response.json()
+        console.log(data)
+        let day = document.getElementById("day_type")
+        day.innerHTML = data.day_type.name;
+        if(data.day_type.name.includes("Blue Day")){
+          day.style.color  = "blue";
+        }
+        else if(data.day_type.name.includes("Red Day")){
+          day.style.color  = "red";
+        }
+        else if(data.day_type.name.includes("Anchor Day")){
+          day.style.color  = "green";
+        }
+        else{
+          day.style.color  = "black";
+        }
+        for(let i = 1; i <= data.day_type.blocks.length; i++){ //add to table
+          var row = table.insertRow(i);
+          var periodName = row.insertCell(0);
+          var start = row.insertCell(1);
+          var end = row.insertCell(2);
+          periodName.innerHTML = data.day_type.blocks[i-1].name
+          start.innerHTML = data.day_type.blocks[i-1].start
+          end.innerHTML = data.day_type.blocks[i-1].end
+        }
+    }
+
+    document.querySelector('#cal_picker').onchange = scheduleFetch;
+    
+
+  </script>
+</body>
+</html>

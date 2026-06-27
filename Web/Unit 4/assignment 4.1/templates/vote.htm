@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Votes</title>
+  <style>
+    body{
+        font-family: Calibri;
+        text-align: center;
+    }
+    #title{
+        font-size: 2em;
+    }
+    p{
+        font-size: 2em;
+    }
+    #upvote{
+         font-size: 2em;
+         background-color: green;
+         justify-content: center;
+        text-align: center;
+        align-items: center;
+    }
+    #downvote{
+         font-size: 2em;
+         background-color: red;
+        text-align: center;
+        align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="title">Earth is flat: Votes</h1>
+  <h2>Net votes:</h2>
+  <p id="total">0</p>
+  <h2>Upvotes:</h2>
+  <p id='upvotes' style="color: green">0</p>
+  <h2>Downvotes:</h2>
+  <p id='downvotes' style="color: red">0</p>
+  <button type="button" onclick="fetchUpvotes()" id="upvote">Upvote</button>
+  <button type="button" onclick="fetchDownvotes()" id="downvote">Downvote</button>
+
+  <script>
+    async function fetchUpvotes() {
+        const upvote_response = await fetch('http://127.0.0.1/upvote')
+        const upvote_data = await upvote_response.json()
+        let up = document.getElementById("upvotes")
+        let all = document.getElementById("total")
+        up.innerHTML = upvote_data.upvotes;
+        all.innerHTML = upvote_data.total;
+    } 
+    async function fetchDownvotes() {
+        const downvote_response = await fetch('http://127.0.0.1/downvote')
+        const downvote_data = await downvote_response.json()
+        let down = document.getElementById("downvotes")
+        let all = document.getElementById("total")
+        down.innerHTML = downvote_data.downvotes;
+        all.innerHTML = downvote_data.total;
+    } 
+  </script>
+
+</body>
+</html>
