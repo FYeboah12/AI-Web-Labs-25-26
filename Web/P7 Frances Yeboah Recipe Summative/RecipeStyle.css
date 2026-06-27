@@ -1,0 +1,93 @@
+:root{
+	--mauve: #DABFFF;
+	--soft-periwinkle: #907AD6;
+	--grapefruit-pink: #F87575;
+	--tropical-mint: #1EFFBC;
+	--frozen-lake: #7FDEFF;
+}
+body{
+	background-image: url(imgs/checkerbg2.jpg); 
+	font-family: Fredoka;
+}
+h1{
+	text-align: center;
+	background-color: white;
+	color:  var(--frozen-lake);
+	font-size: 2.5em;
+}
+#navbar{
+	background-color: var(--tropical-mint);
+	display: flex;
+	justify-content: space-around;
+	padding: 15px;
+	margin: 0;
+	font-size: 1.5em;
+	position: fixed; /* Set the navbar to fixed position */
+	top: 0; /* Position the navbar at the top of the page */
+	width: 100%; /* Full width */
+	
+}
+#navbar li{
+	list-style-type: none;
+	display: inline;
+}
+#navbar ul{
+	overflow: hidden;
+}
+
+#navbar a:hover{
+	background-color: var(--mauve);
+}
+.active a{
+	background-color: var(--soft-periwinkle);
+	color: white;
+}
+header{
+	margin-top: 75px;
+	background-color: white;
+}
+main{
+	padding: 12px;
+	background-color: var(--grapefruit-pink);	
+}
+.recipe{
+	display: flex;
+	flex-direction: row;
+	padding: 15px;
+}
+#contact{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+.recipes{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	align-content: space-between;
+}
+.recipe_and_name{
+	text-align: center;
+}
+.recipe_and_name img{
+	border-radius: 25%;
+	transition: color 0.5s ease;
+}
+.recipe_and_name img:hover{
+	width: 375px;
+	height: 375px;
+}
+section{
+	font-size: 1.75em;
+}
+footer{
+	display: flex;
+	justify-content: space-evenly;
+	margin: .25%;
+	position: flow;
+	background-color: var(--soft-periwinkle);
+	
+}
+.footer_title{
+	color: var(--tropical-mint);
+}

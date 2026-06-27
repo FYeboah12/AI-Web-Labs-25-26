@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Assignment 2.4</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Macondo&display=swap');
+
+        body {
+            font-family: Macondo;
+            font-size: 1.3em;
+        }
+
+        button {
+            font-size: 1.5em;
+            border-radius: 15px;
+            font-family: Gill Sans MT;
+            background-color: orange;
+        }
+
+        table,
+        td {
+            border: 1px solid black;
+        }
+
+        .map {
+            display: flex;
+            flex-direction: column;
+            border: 5px solid;
+
+        }
+
+        .map ul {
+            border: 1px solid;
+            list-style-type: none;
+            text-align: center;
+        }
+
+        #newMessage {
+            font-size: 2em;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Online Ciphers!</h1>
+    <h2>By Frances Yeboah P7</h2>
+    <h3>Cipher Type Selector:</h3>
+    <select name="cipher" id="cipherType">
+        <option value="def">Select Cipher</option>
+        <option value="Caesar">Caesar (Shift N)</option>
+        <option value="Sub">Substitution (Random/Loaded cipher)</option>
+    </select><br><br>
+    <button id="generateCipher" onClick=generateCipher()>Generate Cipher Here</button>
+    <h3>Load Your Own Cipher:</h3>
+    <input type="text" id="customCipher" />
+    <button id="submitCustomCipher" onClick=verifyCipher()>Submit</button>
+    <h3>Mapping:</h3>
+    <div class="map">
+        <ul id="letters"></ul>
+        <ul id="mappings"></ul>
+    </div>
+    <h3>Encrypt/Decrypt</h3>
+    <p>Your message here:</p>
+    <textarea id="inputMessage"></textarea><br>
+    <button id="encrypt">Encrypt</button>
+    <button id="decrypt">Decrypt</button>
+    <strong>
+        <p id="newMessage"></p>
+    </strong>
+</body>
+<script>
+    var currentCipher = ""
+    let alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const isLowerCase = str => str === str.toLowerCase();
+    function fillMap() {
+        let letters = document.querySelector("#letters")
+        let mappings = document.querySelector("#mappings")
+        letters.innerHTML = ""
+        mappings.innerHTML = ""
+        const node_letters = document.createElement("li");
+        const node_mapps = document.createElement("li");
+        for (let i = 0; i < 26; i++) {
+            let letter =
+                document.createTextNode(alpha.charAt(i) + ",");
+            let mappedTo = document.createTextNode(currentCipher[alpha.charAt(i)] + ",");
+            node_letters.appendChild(letter);
+            letters.appendChild(node_letters);
+            node_mapps.appendChild(mappedTo);
+            mappings.appendChild(node_mapps);
+        }
+
+    }
+    //problem 1
+    function caesarCipher(message, shift) {
+        message = Array.from(message);
+        newMessage = message.map(letter => {
+            if (alpha.indexOf(letter.toUpperCase()) == -1) {
+                return letter;
+            } else {
+                return alpha.charAt((alpha.indexOf(letter.toUpperCase()) + shift) % 26);
+            }
+        })
+        for (let i = 0; i < newMessage.length; i++) {
+            if (isLowerCase(message[i]))
+                newMessage[i] = newMessage[i].toLowerCase()
+        }
+        let cCipher = {}
+        for (let i = 0; i < 26; i++) {
+            cCipher[alpha[i]] = alpha[(i + shift) % 26]
+        }
+        currentCipher = cCipher
+        fillMap()
+        return newMessage.join('');
+    }
+    //problem 2
+    function caesarDecode(message, shift) {
+        message = Array.from(message);
+        newMessage = message.map(letter => {
+            if (alpha.indexOf(letter.toUpperCase()) == -1) {
+                return letter;
+            } else {
+                return alpha.charAt((26 + alpha.indexOf(letter.toUpperCase()) - shift) % 26);
+            }
+        })
+        for (let i = 0; i < newMessage.length; i++) {
+            if (isLowerCase(message[i]))
+                newMessage[i] = newMessage[i].toLowerCase()
+        }
+        return newMessage.join('');
+    }
+    //problem 3
+    function generateCipher() {
+        let indices = []
+        while (indices.length < 26) {
+            index = Math.floor(Math.random() * 26);
+            if (!indices.includes(index)) {
+                indices.push(index)
+            }
+        }
+        let randomCipher = {}
+        for (let i = 0; i < 26; i++) {
+            randomCipher[alpha[i]] = alpha[indices[i]]
+        }
+        currentCipher = randomCipher
+        fillMap()
+        //return currentCipher
+    }
+    //problem 4
+    function substitutionCipher(message, cipherMap) {
+        newMessage = Array.from(message)
+        newMessage = newMessage.map(letter => {
+            if (alpha.indexOf(letter.toUpperCase()) == -1) {
+                return letter;
+            } else {
+                return cipherMap[letter.toUpperCase()];
+            }
+        })
+        for (let i = 0; i < newMessage.length; i++) {
+            if (isLowerCase(message[i]))
+                newMessage[i] = newMessage[i].toLowerCase()
+        }
+        return newMessage.join('');
+    }
+
+    //problem 5
+    function substitutionDecode(message, cipherMap) {
+        newMessage = Array.from(message)
+        newMessage = newMessage.map(letter => {
+            if (alpha.indexOf(letter.toUpperCase()) == -1) {
+                return letter;
+            } else {
+                for (key in cipherMap) {
+                    if (cipherMap[key] == letter.toUpperCase())
+                        return key;
+                }
+            }
+        })
+        console.log(newMessage)
+        for (let i = 0; i < newMessage.length; i++) {
+            if (isLowerCase(message[i]))
+                newMessage[i] = newMessage[i].toLowerCase()
+        }
+        return newMessage.join('');
+    }
+    function verifyCipher() {
+        let loadedCipher = document.querySelector("#customCipher").value.toUpperCase()
+        verify = ""
+        if (loadedCipher.length != 26) {
+            alert("Invalid length")
+            return false
+        }
+        for (let i = 0; i < 26; i++) {
+            if (verify.includes(loadedCipher.charAt(i))) {
+                alert("Duplicate")
+                return false
+            }
+            verify += loadedCipher.charAt(i)
+        }
+        //turn loadedCipher into a map
+        let cipherMap = {}
+        for (let i = 0; i < 26; i++) {
+            cipherMap[alpha[i]] = loadedCipher[i]
+        }
+        currentCipher = cipherMap
+        fillMap()
+        //return currentCipher
+    }
+
+    document.querySelector("#encrypt").onclick = (ev) => {
+        let message = document.querySelector("#inputMessage").value
+        if (document.querySelector("#cipherType").value == "Caesar") {
+            let shift = Number(prompt("What is the shift value"))
+            newMessage = caesarCipher(message, shift)
+        }
+        else {
+            newMessage = substitutionCipher(message, currentCipher)
+        }
+        document.querySelector("#newMessage").innerHTML = newMessage
+    }
+    document.querySelector("#decrypt").onclick = (ev) => {
+        let message = document.querySelector("#inputMessage").value
+        if (document.querySelector("#cipherType").value == "Caesar") {
+            let shift = Number(prompt("What is the shift value"))
+            newMessage = caesarDecode(message, shift)
+        }
+        else {
+            newMessage = substitutionDecode(message, currentCipher)
+        }
+        document.querySelector("#newMessage").textContent = newMessage
+    }
+
+
+</script>
+
+</html>

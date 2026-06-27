@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Assignment 2.3</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+		body {
+			font-family: Ubuntu;
+		}
+
+		.clickbox {
+			width: 125px;
+			height: 125px;
+			background-color: #dedede;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(3, 125px);
+			grid-template-rows: repeat(3, 125px);
+			gap: 10px;
+		}
+
+		#chat_area {
+			margin-top: 15px;
+			border: solid 2px;
+			padding: 5px;
+		}
+
+		#chat_area li {
+			list-style-type: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="p1">
+		<h1>Problem 1: Temperature Converter</h1>
+		<!--fah to cel-->
+		<div>
+			<p> Fahreinheit </p>
+			<input id="temp" type="">
+			<button id="myBtn">Press Me</button>
+		</div>
+		<div>
+			<span id="converted"></span>
+		</div>
+	</div>
+
+	<div id="p2">
+		<h1>Problem 2: Simple Stopwatch</h1>
+		<h2 id="time">00:00:00</h2>
+		<button id="start">Start</button>
+		<button id="stop">Stop</button>
+		<button id="reset">Reset</button>
+	</div>
+
+	<div id="p3">
+		<h1>Problem 3: To Do List</h1>
+		<input id="todo_input" type="">
+		<button id="add">Press Me</button>
+		<div>
+			<p>My To-Do List</p>
+			<ul id="todo">
+			</ul>
+		</div>
+
+	</div>
+	<div id="p4">
+		<h1>Problem 4: Color Clicker</h1>
+		<div class="clickbox"></div>
+	</div>
+	<div id="p5">
+		<h1>Problem 5: Multiple Color Divs</h1>
+		<div class="grid">
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+			<div class="clickbox"></div>
+		</div>
+	</div>
+	<div id="p6">
+		<h1>Problem 6: Naive Chatbot</h1>
+		<input id="chat" type="" placeholder="chat">
+		<button id="ai">Chat with an "AI" bot</button>
+		<div id="chat_area">
+			<ul id="responses">
+			</ul>
+		</div>
+	</div>
+	<div id="p7">
+		<h1>Problem 7: Keypress Color Change</h1>
+		<h2> Keys for each color: </h2>
+		<p>A - red</p>
+		<p>W - blue</p>
+		<p>G - purple</p>
+		<p>N - yellow</p>
+		<p>Space - green</p>
+		<p>Any other key is pink :)</p>
+	</div>
+	<div id="p8">
+		<h1>Problem 8: Word Counter</h1>
+		<textarea id="textarea"></textarea>
+		<p>Word Count: <span id="wordcount">0</span></p>
+	</div>
+	<div id="p9">
+		<h1>Problem 9: Font Size/Style Changer</h1>
+		<p class="ive" style="font-size:24px">What's After Like? (It is a lyric from an IVE song which samples "I Will
+			Survive" by Gloria Gaynor)</p>
+
+		<button id="plus">+</button>
+		<button id="minus">-</button>
+		<button id="default">default size</button>
+		<p>Color picker:</p>
+		<input type="color" id="colorpicker" />
+	</div>
+
+	<script>
+		//THANK YOU STACK OVERFLOW!!!!!
+		//#1
+		document.querySelector("#myBtn").onclick = (ev) => {
+			let fah = Number(document.querySelector("#temp").value)
+			let cel = (fah - 32) * (5 / 9)
+			document.querySelector("#converted").innerHTML = "Celsius: " + cel.toFixed(3)
+		}
+
+		//#2
+		let stopwatchInterval;
+		let stopwatchSeconds = 0;
+		function formatTime(sec) {
+			const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+			const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+			const s = String(sec % 60).padStart(2, '0');
+			return `${h}:${m}:${s}`;
+		}
+		document.querySelector("#start").onclick = (ev) => {
+			clearInterval(stopwatchInterval);
+			stopwatchInterval = setInterval(() => {
+				stopwatchSeconds++;
+				document.querySelector("#time").textContent = formatTime(stopwatchSeconds);
+			}, 1000);
+		};
+		document.querySelector("#stop").onclick = (ev) => {
+			clearInterval(stopwatchInterval);
+		};
+		document.querySelector("#reset").onclick = (ev) => {
+			clearInterval(stopwatchInterval);
+			stopwatchSeconds = 0;
+			document.querySelector("#time").textContent = '00:00:00';
+		};
+
+		//#3
+		document.querySelector("#add").onclick = (ev) => {
+			let my_list = document.querySelector("#todo")
+			const node = document.createElement("li");
+			const textnode = document.createTextNode(document.querySelector("#todo_input").value);
+			node.appendChild(textnode);
+			my_list.appendChild(node);
+		}
+
+		//#4
+		document.querySelector(".clickbox").onclick = (ev) => {
+			document.querySelector(".clickbox").style.backgroundColor = "pink";
+		}
+
+		//#5
+		let boxes = Array.from(document.querySelectorAll(".clickbox"))
+		boxes.forEach((box, index) => {
+			box.onclick = function () { box.style.backgroundColor = "pink"; }
+		});
+
+		//#6
+		document.querySelector("#ai").onclick = (ev) => {
+			let ai_responses = ["your ai slop bores me", "that's cool i guess", "heheheheheh", "this is boring", "what is the meaning of life", "web or mobile? how about web AND mobile?", "python is the best programming language it's not even close", "good job buddy", "junior year sucks", "period 7 on top", "bye bye", "hihihihihihihi", "googoogaagaa", "STAN TWICE", "My bias is Momo", "This is a cool ai chatbot totally made with real ai and not simple javascript", "TwT", "😋", "chat are we cooked", "We are so fried"]
+			let chatroom = document.querySelector("#responses")
+			const your_node = document.createElement("li");
+			const your_textnode = document.createTextNode(document.querySelector("#chat").value);
+			const ai_node = document.createElement("li");
+			const ai_textnode = document.createTextNode(ai_responses[Math.floor(Math.random() * ai_responses.length)]);
+			your_node.appendChild(your_textnode);
+			your_node.setAttribute("style", "text-align: left")
+			chatroom.appendChild(your_node);
+			ai_node.appendChild(ai_textnode);
+			ai_node.setAttribute("style", "text-align: right")
+			chatroom.appendChild(ai_node);
+		}
+
+		//#7
+		document.body.addEventListener("keydown", logKey);
+		function logKey(e) {
+			let key = e.code
+			if (key == "KeyA") {
+				document.body.style.backgroundColor = "#f02d3a";
+			}
+			else if (key == "KeyW") {
+				document.body.style.backgroundColor = "#82AEB1";
+			}
+			else if (key == "KeyG") {
+				document.body.style.backgroundColor = "#5F4BB6";
+			}
+			else if (key == "KeyN") {
+				document.body.style.backgroundColor = "#F4F769";
+			}
+			else if (key == "Space") {
+				document.body.style.backgroundColor = "#A2D729";
+			}
+			else { document.body.style.backgroundColor = "#F78DA0"; }
+		}
+
+		//#8
+		document.querySelector("#textarea").oninput = function () {
+			let actualtext = document.querySelector("#textarea").value
+			if (actualtext.length == 0) document.querySelector("#wordcount").innerHTML = 0
+			else
+				document.querySelector("#wordcount").innerHTML = actualtext.split(" ").length
+		}//spaces are not actually words but we'll cross that bridge when we come to it
+
+		//#9
+		let currentSize = document.querySelector(".ive").style.fontSize
+		currentSize = Number(currentSize.substring(0, currentSize.length - 2))
+		document.querySelector("#plus").onclick = (ev) => {
+			currentSize += 10
+			document.querySelector(".ive").style.fontSize = currentSize + "px"
+		}
+
+		document.querySelector("#minus").onclick = (ev) => {
+			currentSize -= 10
+			document.querySelector(".ive").style.fontSize = currentSize + "px"
+		}
+		document.querySelector("#default").onclick = (ev) => {
+			document.querySelector(".ive").style.fontSize = "24px"
+		}
+
+		let colorPicker = document.querySelector("#colorpicker")
+		colorPicker.addEventListener("input", watchColorPicker);
+
+		function watchColorPicker(event) {
+			document.querySelector(".ive").style.color = event.target.value;
+		}
+	</script>
+</body>
+
+</html>

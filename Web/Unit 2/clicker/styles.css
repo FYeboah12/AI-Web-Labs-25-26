@@ -1,0 +1,66 @@
+body {
+    font-family: Comic Relief;
+    background-image: url(https://img.freepik.com/premium-vector/cute-pink-plaid-print-plaid-print-pink-plaid-background-picnic-background-checkered-background_405506-407.jpg?semt=ais_incoming&w=740&q=80);
+}
+
+h1 {
+    text-align: center;
+    font-size: 3em;
+}
+h2 { 
+    font-size: 2em;
+}
+.entire_display{
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+p{
+    font-family: Sunshiney;
+    font-size: 1.5em;
+}
+/* .entire_display div{
+    margin: 5%;
+} */
+.upgrades_display{
+    border: solid gold 3px;
+    background-color: #daa3e2;
+    padding: 2.5%;
+}
+.purchasable_upgrades{
+    border: 10px dotted;
+    padding: 3%;
+}
+
+.purchases{
+    display: flex;
+    flex-direction: column;
+}
+button{
+    transition-duration: 0.4s;
+    margin: 1.5%;
+    padding: 5%;
+    font-size: xx-large;
+    font-family: Just Me Again Down Here;
+    border-radius: 15%;
+    background-color: white;
+    width: 50%;
+}
+button:hover{
+    font-size: 2.5em;
+    box-shadow:0 8px 16px 0 rgba(0,0,0,0.6)
+}
+.frances_clicker{
+    width: 100%;
+}
+.main_upgrade{
+    background-color: lightblue;
+}
+.secondary_upgrade{
+    background-color: lightgreen;
+}
+.upgrade_pair{
+    display: flex;
+    flex-direction: row;
+}
+/*i will styllize the difference between amin and sec uprgrades*/
