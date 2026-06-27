@@ -1,0 +1,47 @@
+# Name:
+# Date:
+
+def check_complete(assignment, csp_table):
+   return True
+   
+def select_unassigned_var(assignment, variables, csp_table):
+   return 0
+
+def isValid(value, var_index, assignment, variables, csp_table):
+   return True
+
+def ordered_domain(var_index, assignment, variables, csp_table):
+   return []
+
+def update_variables(value, var_index, assignment, variables, csp_table):
+   return {}
+
+def backtracking_search(puzzle, variables, csp_table): 
+   return recursive_backtracking(puzzle, variables, csp_table)
+
+def recursive_backtracking(assignment, variables, csp_table):
+   return None
+
+def display(solution):
+   return ""
+
+def sudoku_csp():
+   return [[]]
+
+def initial_variables(puzzle, csp_table):
+   return {}
+   
+def main():
+   puzzle = input("Type a 81-char string:") 
+   while len(puzzle) != 81:
+      print ("Invalid puzzle")
+      puzzle = input("Type a 81-char string: ")
+   csp_table = sudoku_csp()
+   variables = initial_variables(puzzle, csp_table)
+   print ("Initial:\n" + display(puzzle))
+   solution = backtracking_search(puzzle, variables, csp_table)
+   if solution != None: print ("solution\n" + display(solution))
+   else: print ("No solution found.\n")
+   
+if __name__ == '__main__': main()
+
